@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/pyimapsync-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pyimapsync-{{ version }}.tar.gz
   sha256: fe4f7244fdc83faba005065ab0347474393b9817bf0d641f425574b5588846af
 
 build:
@@ -14,14 +14,15 @@ build:
     - pyimapsync=pyimapsync.__main__:command_line_parser
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv
-  number: 0
+  number: 1
 
 requirements:
   host:
     - pip
-    - python >=3.6
+    - python {{ python_min }}
+    - setuptools
   run:
-    - python >=3.6
+    - python >={{ python_min }}
 
 test:
   imports:
@@ -31,6 +32,7 @@ test:
     - pyimapsync --help
   requires:
     - pip
+    - python {{ python_min }}
 
 about:
   home: https://github.com/pyscioffice/pyimapsync
