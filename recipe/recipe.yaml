@@ -1,0 +1,52 @@
+schema_version: 1
+
+context:
+  name: pyimapsync
+  version: "0.0.2"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/pyimapsync-${{ version }}.tar.gz
+  sha256: fe4f7244fdc83faba005065ab0347474393b9817bf0d641f425574b5588846af
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+  python:
+    entry_points:
+      - pyimapsync=pyimapsync.__main__:command_line_parser
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools
+  run:
+    - python >=${{ python_min }}
+
+tests:
+  - python:
+      imports:
+        - pyimapsync
+      pip_check: true
+      python_version: ${{ python_min }}
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - pyimapsync --help
+
+about:
+  summary: Transfer emails between multiple IMAP servers.
+  license: BSD-3-Clause
+  license_file: LICENSE
+  homepage: https://github.com/pyscioffice/pyimapsync
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
